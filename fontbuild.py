@@ -1,39 +1,40 @@
-﻿from copy import copy
+﻿from PIL import Image
+from copy import copy
 
-class NumberMasks(object):
+class MaskNumber(object):
     """ Hold our masks, nothing special """
 
-    ZERO_MASK = [
-        [0, 1, 1, 1, 0],
-        [1, 0, 0, 0, 1],
-        [1, 0, 0, 0, 1],
-        [1, 0, 0, 0, 1],
-        [1, 0, 0, 0, 1],
-        [1, 0, 0, 0, 1],
-        [1, 0, 0, 0, 1],
-        [0, 1, 1, 1, 0],
-    ]
+    def __init__(self, image):
+        """ Takes a source_image file (as str) and then creates a mask from the
+        data within it """
+        self.source_path = image
+        self.source_image = Image.open(self.source_path)
+        self.width = self.size[0]
+        self.height = self.size[1]
+        self.mask = self.generate_mask()
+        
+    def generate_mask(self, threshold=255):
+        """ Reads a PNG file and creates a bit mask """
+        pixel_data = self.source_image.getdata()
+        for pixel in pixel_data:
+            print pixel
+        mask = [[0]*self.width for x in range(self.height)]
+        return mask
+            
+    @property
+    def size(self):
+        return self.source_image.size
 
-    EIGHT_MASK = [
-        [0, 1, 1, 1, 0],
-        [1, 0, 0, 0, 1],
-        [1, 0, 0, 0, 1],
-        [0, 1, 1, 1, 0],
-        [0, 1, 1, 1, 0],
-        [1, 0, 0, 0, 1],
-        [1, 0, 0, 0, 1],
-        [0, 1, 1, 1, 0],
-    ]    
-
+        
 class CounterNumber(object):
     """ Represents a grid based item which we then fill in the
     'on' bits with image data pulled from sneakerpedia. """
     
-    width, height = 5, 8
     mask, data = list(), list()
 
     def __init__(self, mask=None):
-        self.build_mask(mask)
+        self.build_mask(mask.mask)
+        self.width, self.height = mask.size
 
     def build_mask(self, init=None):
         """ Create a mask, either zero filled or with an init list. Could probably
