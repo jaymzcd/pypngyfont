@@ -40,7 +40,7 @@ class PediaImages(object):
         digits = [
             item,
         ]
-        [digit.bind_images(self.images) for digit in digits]
+        [digit.bind_images(self.images, jitter=True) for digit in digits]
         context = {
             'digits': digits,
             'bit': dict(width=w, height=h),
