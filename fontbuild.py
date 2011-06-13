@@ -1,9 +1,11 @@
 ﻿from PIL import Image
 from copy import copy
 
-class MaskNumber(object):
-    """ Hold our masks, nothing special """
-
+class ImageBasedMask(object):
+    """ Reads an image using PIL and turns it into a bit mask for use by our
+    HTMLMaskedGrid item. That takes a mask and a bunch of images and uses it
+    to output a bunch of div's for displaying as a grid """
+    
     def __init__(self, image):
         """ Takes a source_image file (as str) and then creates a mask from the
         data within it """
@@ -13,22 +15,30 @@ class MaskNumber(object):
         self.height = self.size[1]
         self.mask = self.generate_mask()
         
-    def generate_mask(self, threshold=255):
-        """ Reads a PNG file and creates a bit mask """
+    def generate_mask(self):
+        """ Reads a PNG file and creates a bit mask, initialize to zero """
         pixel_data = self.source_image.getdata()
-        for pixel in pixel_data:
-            print pixel
         mask = [[0]*self.width for x in range(self.height)]
+        for index, pixel in enumerate(pixel_data):
+            mask[index/self.width][index%self.width] = self.test(pixel)
         return mask
+        
+    def test(self, pixel, threshold=255):
+        """ Checks if a given pixel is on or off for our mask """
+        is_valid = False
+        cnt = (sum(pixel)/3) / threshold
+        if cnt == 0:
+            is_valid = True
+        return is_valid
             
     @property
     def size(self):
         return self.source_image.size
 
         
-class CounterNumber(object):
+class HTMLMaskedGrid(object):
     """ Represents a grid based item which we then fill in the
-    'on' bits with image data pulled from sneakerpedia. """
+    'on' bits with image data passed in an array. """
     
     mask, data = list(), list()
 

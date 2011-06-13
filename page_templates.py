@@ -8,8 +8,8 @@
         $(document).ready(function() { }); 
     </script>
     <style type="text/css">
-        .bit { width:100px; height:80px; overflow:hidden; float:left; }
-        .bit > .hoverimage > img { width:100px; height:80px; }
+        .bit { width:{{ bit.width }}px; height:{{ bit.height }}px; overflow:hidden; float:left; }
+        .bit > .hoverimage > img { width:{{ bit.width }}; height:{{ bit.height }}px; }
         .digit { width:600px; }
         .digit-container { float:left; width:600px; display:inline-block; }
         #copy { font-family: 'Verdana'; margin:10px; clear:both; }

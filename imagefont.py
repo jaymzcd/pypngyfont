@@ -6,7 +6,7 @@ import urllib
 import cherrypy
 
 from page_templates import PAGE_TEMPLATE
-from fontbuild import CounterNumber, MaskNumber
+from fontbuild import HTMLMaskedGrid, ImageBasedMask
         
 class PediaImages(object):
     """ Quick'n'easy cherrypy handler to load in data from sneakerpedia to
@@ -35,11 +35,12 @@ class PediaImages(object):
         """ Our homepage view, create a digit, bind some images to it and
         return the rendered template """
         digits = [
-            CounterNumber(MaskNumber('img/test.png')),
+            HTMLMaskedGrid(ImageBasedMask('img/test.png')),
         ]
         [digit.bind_images(self.images) for digit in digits]
         context = {
             'digits': digits,
+            'bit': dict(width=10, height=10),
         }
         return Template(PAGE_TEMPLATE).render(context)
     index.exposed = True
