@@ -9,19 +9,15 @@
     </script>
     <style type="text/css">
         .bit { width:{{ bit.width }}px; height:{{ bit.height }}px; overflow:hidden; float:left; }
-        .bit > .hoverimage > img { width:{{ bit.width }}; height:{{ bit.height }}px; }
-        .digit { width:600px; }
-        .digit-container { float:left; width:600px; display:inline-block; }
+        .bit img { width:{{ bit.width }}px; height:{{ bit.height }}px; }
+        .digit { width:{{ char.width }}px; }
+        .digit-container { float:left; width:{{ char.width }}px; display:inline-block; }
         #copy { font-family: 'Verdana'; margin:10px; clear:both; }
     </style>
 </head>
 <body>
     <div id="copy">
-        <h1>Sneakerpedia Live pull bitmask clock</h1>
-        What you're seeing here is a live pull of the latest images
-        from Sneakerpedia. The shapes are customizable via a bitmask. Images
-        rotate through an array to avoid blanks and default images from the site
-        are ignored.
+        <h1>'Font' from images created from PNG mask</h1>
     </div>
     {% for digit in digits %}
         <div class="digit-container">{{ digit }}</div>

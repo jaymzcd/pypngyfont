@@ -4,6 +4,7 @@ from BeautifulSoup import BeautifulSoup as Soup
 from jinja2 import Template
 import urllib
 import cherrypy
+import re
 
 from page_templates import PAGE_TEMPLATE
 from fontbuild import HTMLMaskedGrid, ImageBasedMask
@@ -21,7 +22,7 @@ class PediaImages(object):
         images of kicks to build an array of images to use """
         data = urllib.urlopen(self.feed).read()
         souped = Soup(data)
-        results = souped.findAll('a', {'class': 'hoverimage'})
+        results = souped.findAll('img', {'src': re.compile(r'amazon')})
         images = list()
         for result in results:
             if 'default' not in str(result):
@@ -34,13 +35,16 @@ class PediaImages(object):
     def index(self):
         """ Our homepage view, create a digit, bind some images to it and
         return the rendered template """
+        w, h = 20, 20
+        item = HTMLMaskedGrid(ImageBasedMask('img/test.png'))
         digits = [
-            HTMLMaskedGrid(ImageBasedMask('img/test.png')),
+            item,
         ]
         [digit.bind_images(self.images) for digit in digits]
         context = {
             'digits': digits,
-            'bit': dict(width=10, height=10),
+            'bit': dict(width=w, height=h),
+            'char': dict(width=item.width*w, height=item.height*h),
         }
         return Template(PAGE_TEMPLATE).render(context)
     index.exposed = True
