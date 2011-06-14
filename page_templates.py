@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
-    <title>Sneakerpedia Images</title>
+    <title>Bitmasked Image Thing</title>
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.1.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function() { }); 
@@ -12,7 +12,7 @@
         .bit img { width:{{ bit.width }}px; height:{{ bit.height }}px; }
         .digit { width:{{ char.width }}px; }
         .digit-container { float:left; width:{{ char.width }}px; display:inline-block; }
-        #copy { font-family: 'Verdana'; margin:10px; clear:both; }
+        #copy { font-family: 'Verdana'; margin:10px; clear:both; display:none; }
     </style>
 </head>
 <body>

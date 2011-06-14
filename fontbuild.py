@@ -78,7 +78,7 @@ class HTMLMaskedGrid(object):
         for y in range(self.height):
             render += '<div style="clear:both;"></div>';
             for x in range(self.width):
-                render += '<div class="bit" style="opacity:'+str(self.mask[y][x])+';">'+str(self.data[y][x])+'</div>'
+                render += '<div class="bit" style="opacity:'+str(self.mask[y][x])+';">'+unicode(self.data[y][x])+'</div>'
         render += '</div>'
         return render
 

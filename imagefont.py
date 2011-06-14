@@ -14,7 +14,7 @@ class PediaImages(object):
     create a pool of images. We then make digits and bind them to the source
     data and then return the number rendered out. """
     
-    feed = 'http://www.sneakerpedia.com/'
+    feed = 'http://www.flickr.com/search/?q=red+heart&ct=2&mt=photos&adv=1'
     images = list()
 
     def source_images(self):
@@ -22,11 +22,10 @@ class PediaImages(object):
         images of kicks to build an array of images to use """
         data = urllib.urlopen(self.feed).read()
         souped = Soup(data)
-        results = souped.findAll('img', {'src': re.compile(r'amazon')})
+        results = souped.findAll('img', {'class': 'pc_img'})
         images = list()
         for result in results:
-            if 'default' not in str(result):
-                images.append(str(result))
+            images.append(unicode(result))
         return images
 
     def __init__(self):
@@ -36,7 +35,7 @@ class PediaImages(object):
         """ Our homepage view, create a digit, bind some images to it and
         return the rendered template """
         w, h = 20, 20
-        item = HTMLMaskedGrid(ImageBasedMask('img/test.png'))
+        item = HTMLMaskedGrid(ImageBasedMask('img/loveyou.png'))
         digits = [
             item,
         ]

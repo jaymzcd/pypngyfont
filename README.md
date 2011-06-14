@@ -8,5 +8,5 @@ to the size of the image and then uses that to output html (using cherrypy) wher
 the image content for each cell comes from the passed images.
 
 You could for example feed it a flickr stream, the picture urls from a facebook
-graph call or a list of twitter profile pics. In this case it's pulling content
-from the sneakerpedia.com homepage.
+graph call or a list of twitter profile pics. The current example uses the results
+of a flickr search to create a source table of images for use.
