@@ -8,13 +8,13 @@ import re
 
 from page_templates import PAGE_TEMPLATE
 from fontbuild import HTMLMaskedGrid, ImageBasedMask
-        
+
 class PediaImages(object):
     """ Quick'n'easy cherrypy handler to load in data from sneakerpedia to
     create a pool of images. We then make digits and bind them to the source
     data and then return the number rendered out. """
-    
-    feed = 'http://www.flickr.com/search/?q=red+heart&ct=2&mt=photos&adv=1'
+
+    feed = 'http://www.sneakerpedia.com/'
     images = list()
 
     def source_images(self):
@@ -22,10 +22,11 @@ class PediaImages(object):
         images of kicks to build an array of images to use """
         data = urllib.urlopen(self.feed).read()
         souped = Soup(data)
-        results = souped.findAll('img', {'class': 'pc_img'})
+        results = souped.findAll('a', {'class': 'hoverimage'})
         images = list()
         for result in results:
-            images.append(unicode(result))
+            if 'default' not in str(result):
+                images.append(unicode(result))
         return images
 
     def __init__(self):
@@ -34,8 +35,8 @@ class PediaImages(object):
     def index(self):
         """ Our homepage view, create a digit, bind some images to it and
         return the rendered template """
-        w, h = 20, 20
-        item = HTMLMaskedGrid(ImageBasedMask('img/loveyou.png'))
+        w, h = 15, 15
+        item = HTMLMaskedGrid(ImageBasedMask('img/fl.jpg'))
         digits = [
             item,
         ]
