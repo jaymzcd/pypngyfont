@@ -6,7 +6,7 @@ class ImageBasedMask(object):
     """ Reads an image using PIL and turns it into a bit mask for use by our
     HTMLMaskedGrid item. That takes a mask and a bunch of images and uses it
     to output a bunch of div's for displaying as a grid """
-    
+
     def __init__(self, image):
         """ Takes a source_image file (as str) and then creates a mask from the
         data within it """
@@ -15,7 +15,7 @@ class ImageBasedMask(object):
         self.width = self.size[0]
         self.height = self.size[1]
         self.mask = self.generate_mask()
-        
+
     def generate_mask(self):
         """ Reads a PNG file and creates a bit mask, initialize to zero """
         pixel_data = self.source_image.getdata()
@@ -23,25 +23,31 @@ class ImageBasedMask(object):
         for index, pixel in enumerate(pixel_data):
             is_valid, mask[index/self.width][index%self.width] = self.test(pixel)
         return mask
-        
+
     def test(self, pixel, threshold=255):
         """ Checks if a given pixel is on or off for our mask """
         is_valid = False
-        cnt = sum(pixel[0:3])/3
+
+        try:
+            cnt = sum(pixel[0:3])/3
+        except TypeError:
+            # Probably dealing with a Grayscale single channel image
+            cnt = pixel
+
         if cnt == 0:
             is_valid = True
         opacity_val = 1 - cnt / float(threshold)
         return is_valid, opacity_val
-            
+
     @property
     def size(self):
         return self.source_image.size
 
-        
+
 class HTMLMaskedGrid(object):
     """ Represents a grid based item which we then fill in the
     'on' bits with image data passed in an array. """
-    
+
     mask, data = list(), list()
 
     def __init__(self, mask=None):
@@ -71,7 +77,7 @@ class HTMLMaskedGrid(object):
                     self.data[y][x] = images[(x+y+jitter_amount)%len(images)]
                 else:
                     self.data[y][x] = ''
-                    
+
     def __str__(self):
         """ Handle rendering out a bunch of divs that create our grid """
         render = '<div class="digit">'

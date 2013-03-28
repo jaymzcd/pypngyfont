@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python2
+﻿#!/usr/bin/env python
 
 from BeautifulSoup import BeautifulSoup as Soup
 from jinja2 import Template
@@ -40,13 +40,13 @@ class PediaImages(object):
         return images
 
     def __init__(self):
-        self.images = self.source_images('path', 'img/omalls/*.jpg')
+        self.images = self.source_images()
 
-    def index(self):
+    def index(self, path='img/test.png'):
         """ Our homepage view, create a digit, bind some images to it and
         return the rendered template """
-        w, h = 25, 25
-        item = HTMLMaskedGrid(ImageBasedMask('img/trefoil-30.jpg'))
+        w, h = 28, 19
+        item = HTMLMaskedGrid(ImageBasedMask(path))
         digits = [
             item,
         ]
@@ -59,7 +59,22 @@ class PediaImages(object):
         return Template(PAGE_TEMPLATE).render(context)
     index.exposed = True
 
+
+conf = {
+    '/': {
+        'tools.encode.on': True,
+        'tools.encode.encoding': 'utf-8',
+        'tools.gzip.on': True,
+    },
+    '/media': {
+        'tools.staticdir.on': True,
+        'tools.staticdir.dir': 'media',
+    },
+}
+application = cherrypy.Application(PediaImages(), script_name=None, config=conf)
+
+
 if __name__ == '__main__':
     # Fire up lasers!
     cherrypy.server.socket_host = '0.0.0.0'
-    cherrypy.quickstart(PediaImages())
+    cherrypy.quickstart(PediaImages(), config=conf)
